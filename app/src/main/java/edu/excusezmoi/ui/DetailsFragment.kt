@@ -10,7 +10,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import edu.excusezmoi.R
 import edu.excusezmoi.ui.DetailsViewModel
 
-@AndroidEntryPoint
 class DetailsFragment : Fragment() {
 
     companion object {
