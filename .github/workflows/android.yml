@@ -22,7 +22,7 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew build
 
-  unit tests:
+  unit_tests:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
@@ -39,7 +39,7 @@ jobs:
     - name: Unit tests
       run: ./gradlew test --stacktrace
 
-  instrumented tests:
+  instrumented_tests:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
