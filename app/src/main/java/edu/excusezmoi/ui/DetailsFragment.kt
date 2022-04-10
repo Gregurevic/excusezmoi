@@ -1,4 +1,4 @@
-package edu.excusezmoi.ui.details
+package edu.excusezmoi.ui
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -6,8 +6,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import dagger.hilt.android.AndroidEntryPoint
 import edu.excusezmoi.R
+import edu.excusezmoi.ui.DetailsViewModel
 
+@AndroidEntryPoint
 class DetailsFragment : Fragment() {
 
     companion object {
@@ -15,7 +18,6 @@ class DetailsFragment : Fragment() {
     }
 
     private lateinit var viewModel: DetailsViewModel
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
