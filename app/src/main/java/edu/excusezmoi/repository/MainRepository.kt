@@ -16,7 +16,7 @@ class MainRepository constructor(
     private val excuseCacheMapper: ExcuseCacheMapper,
     private val excuseNetworkMapper: ExcuseNetworkMapper
 ) {
-    suspend fun getExcuse(): Flow<DataState<List<Excuse>>> = flow {
+    suspend fun getExcuses(): Flow<DataState<List<Excuse>>> = flow {
         emit(DataState.Loading)
         try {
             val networkExcuse = excuseService.getExcuse()
