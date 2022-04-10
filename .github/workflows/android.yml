@@ -43,7 +43,7 @@ jobs:
     runs-on: macos-latest
     steps:
     - name: checkout
-        uses: actions/checkout@v3
+      uses: actions/checkout@v3
     - name: Instrumented tests
       uses: reactivecircus/android-emulator-runner@v2
       with:
