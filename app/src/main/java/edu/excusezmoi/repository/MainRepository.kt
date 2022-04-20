@@ -21,8 +21,8 @@ class MainRepository constructor(
         try {
             val networkExcuse = excuseService.getExcuse()
             val excuse = excuseNetworkMapper.entityToModel(networkExcuse)
-            excuseDao.insert(excuseCacheMapper.modelToEntity(excuse))
-            val cachedExcuses = excuseDao.getAll()
+            excuseDao.insertCacheEntity(excuseCacheMapper.modelToEntity(excuse))
+            val cachedExcuses = excuseDao.getAllCached()
             emit(DataState.Success(excuseCacheMapper.entityListToModelList(cachedExcuses)))
         } catch (e: Exception) {
             emit(DataState.Error(e))
