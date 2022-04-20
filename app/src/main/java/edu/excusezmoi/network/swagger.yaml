@@ -1,0 +1,111 @@
+swagger: "2.0"
+info:
+  description: "Excuser public API Swagger description. In the third request the keyword _category_ is to be ommitted. It is a limitation of OpenAPI specification that it can not be defined here properly. See related issue here: https://github.com/swagger-api/swagger-editor/issues/1677"
+  version: "1.0.0"
+  title: "Excuser API description for the Excusez-moi! Android application"
+  contact:
+    email: "paul.greg.indy@gmail.com"
+host: "excuser.herokuapp.com"
+basePath: "/v1"
+tags:
+- name: "excuse"
+  description: "Returns excuses of predfined quantity from a single category if those parameters are specified."
+
+schemes:
+- "https"
+paths:
+  /excuse:
+    get:
+      tags:
+      - "excuse"
+      summary: "Returns a random Excuse."
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Excuse"
+  /excuse/{count}:
+    get:
+      tags:
+      - "excuse"
+      summary: "Returns a predefined number of random excuses."
+      produces:
+      - "application/json"
+      parameters:
+      - name: "count"
+        in: "path"
+        description: "number of excuses to be returned"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Excuse"
+  /excuse/category/{category}:
+    get:
+      tags:
+      - "excuse"
+      summary: "Returns a random Excuse from a predefined category."
+      produces:
+      - "application/json"
+      parameters:
+      - name: "category"
+        in: "path"
+        description: "the category which the excuse need to belong to"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Excuse"
+  /excuse/{category}/{count}:
+    get:
+      tags:
+      - "excuse"
+      summary: "Returns a predefined number of random excuses from a predefined category."
+      produces:
+      - "application/json"
+      parameters:
+      - name: "category"
+        in: "path"
+        description: "the category which the excuse need to belong to"
+        required: true
+        type: "string"
+      - name: "count"
+        in: "path"
+        description: "number of excuses to be returned"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Excuse"
+
+definitions:
+  Excuse:
+    type: "object"
+    required:
+    - "id"
+    - "excuse"
+    - "category"
+    properties:
+      questionId:
+        type: "integer"
+        format: "int64"
+      excuseText:
+        type: "string"
+        description: "The excuse itself."
+      categoryText:
+        type: "string"
+        description: "The category the excuse belongs to."
