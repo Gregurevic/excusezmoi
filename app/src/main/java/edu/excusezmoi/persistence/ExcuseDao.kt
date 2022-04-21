@@ -1,6 +1,9 @@
 package edu.excusezmoi.persistence
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
 
 @Dao
 interface ExcuseDao {
@@ -24,7 +27,7 @@ interface ExcuseDao {
     suspend fun isBanned(id: Int): Boolean
 
     @Query("SELECT * FROM modifications WHERE id = :id ORDER BY id ASC LIMIT 1")
-    suspend fun getModified(id: Int): ModificationEntity
+    suspend fun getModified(id: Int): ModificationEntity?
 
     @Query("SELECT * FROM customs WHERE id = :id ORDER BY id ASC LIMIT 1")
     suspend fun getCustom(id: Int): CustomExcuseEntity
@@ -34,4 +37,7 @@ interface ExcuseDao {
 
     @Query("SELECT id FROM customs WHERE category = :category")
     suspend fun getCustomIdsByCategory(category: String): List<Int>
+
+    @Query("DELETE FROM excuses")
+    suspend fun deleteAllCached()
 }

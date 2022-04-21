@@ -1,7 +1,6 @@
 package edu.excusezmoi.ui
 
 import androidx.lifecycle.*
-import dagger.assisted.Assisted
 import dagger.hilt.android.lifecycle.HiltViewModel
 import edu.excusezmoi.model.Excuse
 import edu.excusezmoi.repository.MainRepository
@@ -26,7 +25,7 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             when(mainStateEvent) {
                 is MainStateEvent.GetExcuseEvents -> {
-                    mainRepository.getExcuses().onEach { dataState ->
+                    mainRepository.getNewExcuses().onEach { dataState ->
                         _dataState.value = dataState
                     }.launchIn(viewModelScope)
                 }
