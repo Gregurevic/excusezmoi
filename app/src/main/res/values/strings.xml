@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">Excusezmoi</string>
+    <string name="app_name">Excusez-moi!</string>
+    <string name="category">category</string>
 </resources>
