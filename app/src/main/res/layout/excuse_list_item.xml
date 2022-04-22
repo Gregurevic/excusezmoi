@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/excuse_list_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:backgroundTint="@color/green_lighter"
+    android:layout_marginHorizontal="30dp"
+    android:orientation="horizontal" >
+
+    <Button
+        android:id="@+id/excuse_list_item_copy"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight = "1"
+        android:backgroundTint="@color/yellow_light"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        android:textAlignment="textStart"
+        android:drawableEnd="@drawable/ic_baseline_content_copy_24"
+        android:drawableTint="@color/black"
+        />
+
+    <ImageButton
+        android:id="@+id/excuse_list_item_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:backgroundTint="@color/yellow_light"
+        app:srcCompat="@drawable/ic_baseline_keyboard_arrow_right_24"
+        app:tint="@color/black" />
+</LinearLayout>

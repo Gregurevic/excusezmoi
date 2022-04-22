@@ -18,6 +18,8 @@ class MainViewModel @Inject constructor(
 
     private val _dataState: MutableLiveData<DataState<List<Excuse>>> = MutableLiveData()
 
+    val excuses: List<Excuse> = listOf(Excuse(1, "asd", "asd"), Excuse(2, "asd", "asdasd"))
+
     val dataState: LiveData<DataState<List<Excuse>>>
         get() = _dataState
 
