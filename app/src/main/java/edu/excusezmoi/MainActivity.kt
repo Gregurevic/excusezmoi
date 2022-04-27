@@ -38,7 +38,6 @@ class MainActivity : AppCompatActivity() {
             if (dataState is DataState.Success<List<Excuse>>)
                 recyclerView.adapter = ExcuseListAdapter(this, dataState.data)
         })
-        recyclerView.setHasFixedSize(true)
 
         /// category spinner
         val spinner: Spinner = findViewById(R.id.spinner)
@@ -54,7 +53,7 @@ class MainActivity : AppCompatActivity() {
         spinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
                 if (pos == 0) mainViewModel.setStateEvent(MainStateEvent.GetNewExcusesEvent)
-                else mainViewModel.setStateEvent(MainStateEvent.GetNewExcusesByCategoryEvent, resources.getStringArray(R.array.category_array)[pos])
+                else mainViewModel.setStateEvent(MainStateEvent.GetNewExcusesByCategoryEvent, resources.getStringArray(R.array.category_array)[pos].lowercase())
             }
             override fun onNothingSelected(p0: AdapterView<*>?) {
                 ///
@@ -67,7 +66,7 @@ class MainActivity : AppCompatActivity() {
             val pos = spinner.selectedItemPosition
             if (0 < pos)
                 mainViewModel.setStateEvent(MainStateEvent.GetNewExcusesByCategoryEvent,
-                    resources.getStringArray(R.array.category_array)[pos])
+                    resources.getStringArray(R.array.category_array)[pos].lowercase())
             else mainViewModel.setStateEvent(MainStateEvent.GetNewExcusesEvent)
         }
 

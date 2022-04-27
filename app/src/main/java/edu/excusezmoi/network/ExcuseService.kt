@@ -8,26 +8,26 @@ interface ExcuseService {
     suspend fun getExcuses(
     ): List<ExcuseNetworkEntity>
 
-    @GET("excuses?category={category}")
+    @GET("excuses")
     suspend fun getExcuseByCategory(
-        @Path("category") category: String
+        @Query("category") category: String
     ): List<ExcuseNetworkEntity>
 
-    @POST("excuses?category={category}&excuse={excuse}")
+    @POST("excuses")
     suspend fun postExcuse(
-        @Path("category") category: String,
-        @Path("excuse") excuse: String,
+        @Query("category") category: String,
+        @Query("excuse") excuse: String,
     )
 
-    @PATCH("excuses?id={id}&category={category}&excuse={excuse}")
+    @PATCH("excuses")
     suspend fun patchExcuse(
-        @Path("id") id: Int,
-        @Path("category") category: String,
-        @Path("excuse") excuse: String,
+        @Query("id") id: Int,
+        @Query("category") category: String,
+        @Query("excuse") excuse: String,
     )
 
-    @DELETE("excuses?id={id}")
+    @DELETE("excuses")
     suspend fun destroyExcuse(
-        @Path("id") id: Int
+        @Query("id") id: Int
     )
 }
