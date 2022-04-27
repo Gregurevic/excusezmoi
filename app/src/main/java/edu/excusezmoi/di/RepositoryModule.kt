@@ -6,10 +6,8 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import edu.excusezmoi.network.ExcuseNetworkMapper
 import edu.excusezmoi.network.ExcuseService
-import edu.excusezmoi.persistence.CustomExcuseMapper
 import edu.excusezmoi.persistence.ExcuseCacheMapper
 import edu.excusezmoi.persistence.ExcuseDao
-import edu.excusezmoi.persistence.ModificationMapper
 import edu.excusezmoi.repository.DetailsRepository
 import edu.excusezmoi.repository.MainRepository
 import javax.inject.Singleton
@@ -24,17 +22,13 @@ object RepositoryModule {
         excuseDao: ExcuseDao,
         excuseService: ExcuseService,
         excuseCacheMapper: ExcuseCacheMapper,
-        excuseNetworkMapper: ExcuseNetworkMapper,
-        customExcuseMapper: CustomExcuseMapper,
-        modificationMapper: ModificationMapper
+        excuseNetworkMapper: ExcuseNetworkMapper
     ): MainRepository {
         return MainRepository(
             excuseDao,
             excuseService,
             excuseCacheMapper,
-            excuseNetworkMapper,
-            customExcuseMapper,
-            modificationMapper
+            excuseNetworkMapper
         )
     }
 
@@ -42,9 +36,13 @@ object RepositoryModule {
     @Provides
     fun provideDetailsRepository(
         excuseDao: ExcuseDao,
+        excuseCacheMapper: ExcuseCacheMapper,
+        excuseService: ExcuseService
     ): DetailsRepository {
         return DetailsRepository(
             excuseDao,
+            excuseCacheMapper,
+            excuseService
         )
     }
 }

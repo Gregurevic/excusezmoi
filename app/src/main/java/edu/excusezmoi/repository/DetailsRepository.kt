@@ -1,9 +1,8 @@
 package edu.excusezmoi.repository
 
-import edu.excusezmoi.persistence.BanEntity
-import edu.excusezmoi.persistence.CustomExcuseEntity
-import edu.excusezmoi.persistence.ExcuseDao
-import edu.excusezmoi.persistence.ModificationEntity
+import edu.excusezmoi.model.Excuse
+import edu.excusezmoi.network.ExcuseService
+import edu.excusezmoi.persistence.*
 import edu.excusezmoi.util.DataState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -11,32 +10,34 @@ import java.lang.Exception
 
 class DetailsRepository constructor(
     private val excuseDao: ExcuseDao,
+    private val excuseCacheMapper: ExcuseCacheMapper,
+    private val excuseService: ExcuseService
 ){
-    suspend fun addCustom(category: String, excuse: String): Flow<DataState<Long>> = flow {
+    suspend fun createExcuse(category: String, excuse: String): Flow<DataState<List<Excuse>>> = flow {
         emit(DataState.Loading)
         try {
-            val row = excuseDao.insertCustom(CustomExcuseEntity(1, category, excuse))
-            emit(DataState.Success(row))
+            excuseService.postExcuse(category, excuse)
+            emit(DataState.Success(excuseCacheMapper.entityListToModelList(excuseDao.selectExcuses())))
         } catch (e: Exception) {
             emit(DataState.Error(e))
         }
     }
 
-    suspend fun addBan(id: Int): Flow<DataState<Long>> = flow {
+    suspend fun updateExcuse(id: Int, category: String, excuse: String): Flow<DataState<List<Excuse>>> = flow {
         emit(DataState.Loading)
         try {
-            val row = excuseDao.insertBan(BanEntity(id))
-            emit(DataState.Success(row))
+            excuseService.patchExcuse(id, category, excuse)
+            emit(DataState.Success(excuseCacheMapper.entityListToModelList(excuseDao.selectExcuses())))
         } catch (e: Exception) {
             emit(DataState.Error(e))
         }
     }
 
-    suspend fun addModification(id: Int, category: String, excuse: String): Flow<DataState<Long>> = flow {
+    suspend fun destroyExcuse(id: Int): Flow<DataState<List<Excuse>>> = flow {
         emit(DataState.Loading)
         try {
-            val row = excuseDao.insertModification(ModificationEntity(id, category, excuse))
-            emit(DataState.Success(row))
+            excuseService.destroyExcuse(id)
+            emit(DataState.Success(excuseCacheMapper.entityListToModelList(excuseDao.selectExcuses())))
         } catch (e: Exception) {
             emit(DataState.Error(e))
         }

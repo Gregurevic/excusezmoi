@@ -18,26 +18,34 @@ class MainViewModel @Inject constructor(
 
     private val _dataState: MutableLiveData<DataState<List<Excuse>>> = MutableLiveData()
 
-    val excuses: List<Excuse> = listOf(Excuse(1, "asd", "asd"), Excuse(2, "asd", "asdasd"))
-
     val dataState: LiveData<DataState<List<Excuse>>>
         get() = _dataState
 
-    fun setStateEvent(mainStateEvent: MainStateEvent) {
+    fun setStateEvent(mainStateEvent: MainStateEvent, category: String = "Family") {
         viewModelScope.launch {
             when(mainStateEvent) {
-                is MainStateEvent.GetExcuseEvents -> {
+                is MainStateEvent.GetCurrentExcusesEvent -> {
+                    mainRepository.getCurrentExcuses().onEach { dataState ->
+                        _dataState.value = dataState
+                    }.launchIn(viewModelScope)
+                }
+                is MainStateEvent.GetNewExcusesEvent -> {
                     mainRepository.getNewExcuses().onEach { dataState ->
                         _dataState.value = dataState
                     }.launchIn(viewModelScope)
                 }
-                /// is SomethinElse ...
+                is MainStateEvent.GetNewExcusesByCategoryEvent -> {
+                    mainRepository.getNewExcusesByCategory(category).onEach { dataState ->
+                        _dataState.value = dataState
+                    }.launchIn(viewModelScope)
+                }
             }
         }
     }
 }
 
 sealed class MainStateEvent {
-    object GetExcuseEvents: MainStateEvent()
-    ///...
+    object GetCurrentExcusesEvent: MainStateEvent()
+    object GetNewExcusesEvent: MainStateEvent()
+    object GetNewExcusesByCategoryEvent: MainStateEvent()
 }

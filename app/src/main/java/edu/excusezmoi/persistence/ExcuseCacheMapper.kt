@@ -24,4 +24,8 @@ class ExcuseCacheMapper@Inject constructor() : EntityMapper<ExcuseCacheEntity, E
     fun entityListToModelList(entities: List<ExcuseCacheEntity>): List<Excuse> {
         return entities.map { entityToModel(it) }
     }
+
+    fun modelListToEntityList(models: List<Excuse>): List<ExcuseCacheEntity> {
+        return models.map { modelToEntity(it) }
+    }
 }

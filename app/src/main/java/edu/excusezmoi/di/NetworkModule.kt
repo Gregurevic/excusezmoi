@@ -27,7 +27,7 @@ object NetworkModule {
     @Provides
     fun provideRetrofit(gson: Gson): Retrofit.Builder {
         return Retrofit.Builder()
-            .baseUrl("https://excuser.herokuapp.com/v1/")
+            .baseUrl("https://random-excuse-api.herokuapp.com/")
             .addConverterFactory(GsonConverterFactory.create(gson))
     }
 

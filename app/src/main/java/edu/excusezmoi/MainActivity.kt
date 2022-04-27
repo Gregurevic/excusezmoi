@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.Spinner
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
@@ -18,19 +19,26 @@ import edu.excusezmoi.ui.MainViewModel
 import edu.excusezmoi.util.DataState
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
+class MainActivity : AppCompatActivity() {
 
     private val mainViewModel: MainViewModel by viewModels()
-
-    private var layoutManager: RecyclerView.LayoutManager? = null
-    private var adapter: RecyclerView.Adapter<ExcuseListAdapter.ItemViewHolder>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
 
+        /// init data
+        mainViewModel.setStateEvent(MainStateEvent.GetCurrentExcusesEvent)
         subscribeObservers()
-        mainViewModel.setStateEvent(MainStateEvent.GetExcuseEvents)
+
+        /// excuse recycler_view
+        val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        mainViewModel.dataState.observe(this, Observer { dataState ->
+            if (dataState is DataState.Success<List<Excuse>>)
+                recyclerView.adapter = ExcuseListAdapter(this, dataState.data)
+        })
+        recyclerView.setHasFixedSize(true)
 
         /// category spinner
         val spinner: Spinner = findViewById(R.id.spinner)
@@ -43,56 +51,51 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             spinner.adapter = adapter
         }
+        spinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
+                if (pos == 0) mainViewModel.setStateEvent(MainStateEvent.GetNewExcusesEvent)
+                else mainViewModel.setStateEvent(MainStateEvent.GetNewExcusesByCategoryEvent, resources.getStringArray(R.array.category_array)[pos])
+            }
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                ///
+            }
+        }
 
-        /// excuse recycler_view
-        layoutManager = LinearLayoutManager(this)
-        adapter = ExcuseListAdapter(this, mainViewModel.excuses)
-        val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
-        recyclerView.layoutManager = layoutManager
-        recyclerView.adapter = adapter
-        recyclerView.setHasFixedSize(true)
+        /// new button
+        val newButton = findViewById<Button>(R.id.new_button)
+        newButton.setOnClickListener {
+            val pos = spinner.selectedItemPosition
+            if (0 < pos)
+                mainViewModel.setStateEvent(MainStateEvent.GetNewExcusesByCategoryEvent,
+                    resources.getStringArray(R.array.category_array)[pos])
+            else mainViewModel.setStateEvent(MainStateEvent.GetNewExcusesEvent)
+        }
 
-        /// new excuses' button
-
-        /// add excuse button
+        /// add button
+        val addButton = findViewById<Button>(R.id.add_button)
+        addButton.setOnClickListener {
+            ///
+        }
     }
 
-    override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
-        // An item was selected. You can retrieve the selected item using
-        // parent.getItemAtPosition(pos)
-        /// get new excuses of the given category
-    }
-
-    override fun onNothingSelected(p0: AdapterView<*>?) {
-        /// do nothing
-    }
-
-    private fun subscribeObservers() {
+    private fun subscribeObservers(){
         mainViewModel.dataState.observe(this, Observer { dataState ->
-            when(dataState) {
+            when(dataState){
                 is DataState.Success<List<Excuse>> -> {
-                    listExcuses(dataState.data)
+                    populateExcuseList(dataState.data)
                 }
                 is DataState.Error -> {
-                    displayError(dataState.exception.message)
+                    ///
                 }
                 is DataState.Loading -> {
-                    ///...
+                    ///
                 }
             }
         })
     }
 
-    private fun displayError(message: String?) {
-        if (message != null) {
-            ///...
-        }
-        else {
-            ///...
-        }
-    }
-
-    private fun listExcuses(excuses: List<Excuse>) {
-        ///...
+    private fun populateExcuseList(excuses: List<Excuse>){
+        val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
+        recyclerView.adapter = ExcuseListAdapter(this, excuses)
     }
 }

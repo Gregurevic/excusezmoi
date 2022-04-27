@@ -1,26 +1,33 @@
 package edu.excusezmoi.network
 
-import retrofit2.http.GET
-import retrofit2.http.Path
+import retrofit2.http.*
 
 interface ExcuseService {
 
-    @GET("excuse")
-    suspend fun getExcuse(): ExcuseNetworkEntity
-
-    @GET("excuse/{count}")
+    @GET("excuses")
     suspend fun getExcuses(
-        @Path("count") count: Int
     ): List<ExcuseNetworkEntity>
 
-    @GET("excuse/{category}")
+    @GET("excuses?category={category}")
     suspend fun getExcuseByCategory(
         @Path("category") category: String
-    ): ExcuseNetworkEntity
-
-    @GET("excuse/{category}/{count}")
-    suspend fun getExcusesByCategory(
-        @Path("category") category: String,
-        @Path("count") count: Int
     ): List<ExcuseNetworkEntity>
+
+    @POST("excuses?category={category}&excuse={excuse}")
+    suspend fun postExcuse(
+        @Path("category") category: String,
+        @Path("excuse") excuse: String,
+    )
+
+    @PATCH("excuses?id={id}&category={category}&excuse={excuse}")
+    suspend fun patchExcuse(
+        @Path("id") id: Int,
+        @Path("category") category: String,
+        @Path("excuse") excuse: String,
+    )
+
+    @DELETE("excuses?id={id}")
+    suspend fun destroyExcuse(
+        @Path("id") id: Int
+    )
 }
