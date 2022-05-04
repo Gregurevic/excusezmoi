@@ -1,6 +1,6 @@
 package edu.excusezmoi
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Spinner
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,6 +18,7 @@ import edu.excusezmoi.ui.ExcuseListAdapter
 import edu.excusezmoi.ui.MainStateEvent
 import edu.excusezmoi.ui.MainViewModel
 import edu.excusezmoi.util.DataState
+
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -73,7 +75,9 @@ class MainActivity : AppCompatActivity() {
         /// add button
         val addButton = findViewById<Button>(R.id.add_button)
         addButton.setOnClickListener {
-            ///
+            val intent = Intent(baseContext, DetailsActivity::class.java)
+            intent.putExtra("EXCUSE_TEXT", "Please specify the excuse, you wish to add!")
+            startActivity(intent)
         }
     }
 

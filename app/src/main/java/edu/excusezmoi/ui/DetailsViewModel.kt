@@ -17,23 +17,21 @@ class DetailsViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val _dataState: MutableLiveData<DataState<Excuse>> = MutableLiveData()
-
-    val dataState: LiveData<DataState<Excuse>>
-        get() = _dataState
-
-    fun setStateEvent(detailsStateEvent: DetailsStateEvent) {
+    fun save(category: String, excuse: String) {
         viewModelScope.launch {
-            when(detailsStateEvent) {
-                /// is DetailsStateEvent.State
-                    /// detailsRepository.action()
-                    /// set dataState
-                    /// launchIn(viewModelScope)
-            }
+            detailsRepository.createExcuse(category, excuse)
         }
     }
-}
 
-sealed class DetailsStateEvent {
-    ///...
+    fun personalize(id: Int, category: String, excuse: String) {
+        viewModelScope.launch {
+            detailsRepository.updateExcuse(id, category, excuse)
+        }
+    }
+
+    fun donutShowAgain(id: Int) {
+        viewModelScope.launch {
+            detailsRepository.destroyExcuse(id)
+        }
+    }
 }

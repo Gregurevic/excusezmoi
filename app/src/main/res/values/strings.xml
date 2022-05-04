@@ -9,8 +9,16 @@
         <item>College</item>
         <item>Party</item>
     </string-array>
+    <string-array name="details_category_array">
+        <item>Family</item>
+        <item>Office</item>
+        <item>Children</item>
+        <item>College</item>
+        <item>Party</item>
+    </string-array>
     <string name="button_new_excuses">Give me new excuses!</string>
     <string name="button_add_excuses">Add!</string>
+    <string name="button_back_excuses">Back!</string>
     <string name="button_ban_excuses">Don\'t show again!</string>
     <string name="button_mod_excuses">Personalize excuse!</string>
     <string name="button_save_excuses">Add to excuses!</string>
