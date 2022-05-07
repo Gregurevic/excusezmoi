@@ -1,5 +1,6 @@
 package edu.excusezmoi.network
 
+import retrofit2.Response
 import retrofit2.http.*
 
 interface ExcuseService {
@@ -17,17 +18,17 @@ interface ExcuseService {
     suspend fun postExcuse(
         @Query("category") category: String,
         @Query("excuse") excuse: String,
-    )
+    ): Response<Unit>
 
-    @PATCH("excuses")
+    @PATCH("excuses/{id}")
     suspend fun patchExcuse(
-        @Query("id") id: Int,
+        @Path("id") id: Int,
         @Query("category") category: String,
         @Query("excuse") excuse: String,
-    )
+    ): Response<Unit>
 
-    @DELETE("excuses")
+    @DELETE("excuses/{id}")
     suspend fun destroyExcuse(
-        @Query("id") id: Int
-    )
+        @Path("id") id: Int
+    ): Response<Unit>
 }
