@@ -12,6 +12,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.analytics.ktx.logEvent
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import edu.excusezmoi.model.Excuse
 import edu.excusezmoi.ui.ExcuseListAdapter
@@ -23,9 +27,14 @@ import edu.excusezmoi.util.DataState
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
+
     private val mainViewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Obtain the FirebaseAnalytics instance.
+        firebaseAnalytics = Firebase.analytics
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
 
@@ -54,8 +63,14 @@ class MainActivity : AppCompatActivity() {
         }
         spinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
+                val category = resources.getStringArray(R.array.category_array)[pos].lowercase()
+                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM) {
+                    param(FirebaseAnalytics.Param.ITEM_ID, pos.toString())
+                    param(FirebaseAnalytics.Param.ITEM_NAME, category)
+                    param(FirebaseAnalytics.Param.CONTENT_TYPE, "category")
+                }
                 if (pos == 0) mainViewModel.setStateEvent(MainStateEvent.GetNewExcusesEvent)
-                else mainViewModel.setStateEvent(MainStateEvent.GetNewExcusesByCategoryEvent, resources.getStringArray(R.array.category_array)[pos].lowercase())
+                else mainViewModel.setStateEvent(MainStateEvent.GetNewExcusesByCategoryEvent, category)
             }
             override fun onNothingSelected(p0: AdapterView<*>?) {
                 ///
@@ -75,9 +90,10 @@ class MainActivity : AppCompatActivity() {
         /// add button
         val addButton = findViewById<Button>(R.id.add_button)
         addButton.setOnClickListener {
-            val intent = Intent(baseContext, DetailsActivity::class.java)
-            intent.putExtra("EXCUSE_TEXT", "Please specify the excuse, you wish to add!")
-            startActivity(intent)
+            throw RuntimeException("Test Crash") /// FORCED CRASH FOR TESTING PURPOSES
+            /// val intent = Intent(baseContext, DetailsActivity::class.java)
+            /// intent.putExtra("EXCUSE_TEXT", "Please specify the excuse, you wish to add!")
+            /// startActivity(intent)
         }
     }
 
